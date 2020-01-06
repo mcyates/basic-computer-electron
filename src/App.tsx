@@ -1,8 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import Computer from "./Computer";
 import "./index.css";
 
-ReactDOM.render(
-  <div>hello world from react!</div>,
-  document.getElementById("root")
-);
+ReactDOM.render(<Computer />, document.getElementById("root"));

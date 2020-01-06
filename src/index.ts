@@ -14,8 +14,8 @@ let mainWindow: Electron.BrowserWindow | null;
 const createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    height: 600,
-    width: 800
+    height: 768,
+    width: 1024
   });
 
   // and load the index.html of the app.
