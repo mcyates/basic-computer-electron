@@ -6,11 +6,9 @@ if (require("electron-squirrel-startup")) {
   // eslint-disable-line global-require
   app.quit();
 }
-
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow: Electron.BrowserWindow | null;
-
 const createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -23,7 +21,6 @@ const createWindow = () => {
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
-
   // Emitted when the window is closed.
   mainWindow.on("closed", () => {
     // Dereference the window object, usually you would store windows
@@ -37,7 +34,6 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", createWindow);
-
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {
   // On OS X it is common for applications and their menu bar
