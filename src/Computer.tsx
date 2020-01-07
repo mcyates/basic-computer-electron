@@ -1,16 +1,34 @@
 import Cpu from "basic-computer";
-import React from "react";
+import React, { useState } from "react";
 
 import binToString, { boolToBinary } from "./utils/utils";
 
 const cpu = new Cpu();
 
 const Computer = () => {
+  const [code, setCode] = useState("");
+  const [isRunning, setIsRunning] = useState(false);
   const regs = cpu.dumpRegs();
   const mem = cpu.dumpMem().flat(1);
 
+  const run = (e: any) => {
+    e.preventDefault();
+    if (!isRunning) {
+      setIsRunning(true);
+      cpu.cycle();
+    } else {
+      setIsRunning(false);
+    }
+    console.log(code.split("\n"));
+  };
+
   return (
     <div>
+      <form id="inputs" onSubmit={e => run(e)}>
+        <h3>Assembly</h3>
+        <textarea onChange={e => setCode(e.target.value)}></textarea>
+        <button>{isRunning ? "Run" : "stop"}</button>
+      </form>
       <div id="flags">
         <h3>flags register</h3>
         {`${boolToBinary(regs.flags)}`}
