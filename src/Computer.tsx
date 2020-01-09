@@ -10,6 +10,7 @@ const Computer = () => {
   const [isRunning, setIsRunning] = useState(false);
   const regs = cpu.dumpRegs();
   const mem = cpu.dumpMem().flat(1);
+  const byteCode: boolean[][] = [];
   let cycles = 0;
   let counter = 0;
 
@@ -17,6 +18,7 @@ const Computer = () => {
     e.preventDefault();
     if (!isRunning) {
       disassemble();
+      loadToRam(byteCode);
       setIsRunning(true);
       while (counter <= cycles) {
         cpu.cycle();
@@ -27,13 +29,26 @@ const Computer = () => {
     }
   };
 
+  const loadToRam = (program: boolean[][]) => {
+    let incr = 0;
+    let tmpArr = [];
+    for (let i = 0; i <= Math.floor(program.length / 16); i++) {
+      tmpArr.push(program.slice(incr, incr + 16));
+      incr = incr + 16;
+    }
+    for (let i = 0; i < tmpArr.length; i++) {
+      for (let j = 0; j < tmpArr[i].length; j++) {
+        cpu.setRam([i, j], boolToBinary(tmpArr[i][j]));
+        console.log(cpu.readMem(i, j));
+      }
+    }
+  };
+
   const disassemble = () => {
     const assembly = code.split("\n");
     const mCode = assembly.map((instruction: string) => {
       return instruction.split(" ");
     });
-
-    const byteCode: boolean[][] = [];
 
     const registerSelect = (register: string) => {
       let result = "";
@@ -55,10 +70,10 @@ const Computer = () => {
       }
       return result;
     };
-    console.log(mCode);
 
     for (let i = 0; i < mCode.length; i++) {
-      let ra, rb;
+      let ra;
+      let rb;
       if (mCode[i][0] !== "") {
         if (mCode[i][0] !== "CLF") {
           mCode[i][1] = mCode[i][1].slice(0, 2);
@@ -139,11 +154,10 @@ const Computer = () => {
           default:
             break;
         }
+        console.log(ra, rb);
       }
     }
-    cycles = byteCode.length - 1;
-    console.log(byteCode);
-    console.log(cycles);
+    cycles = Math.ceil((byteCode.length - 1) / 2);
   };
 
   return (
